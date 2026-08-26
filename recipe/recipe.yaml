@@ -1,0 +1,55 @@
+context:
+  name: gsee
+  version: "0.4.0"
+  python_min: "3.12"
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/g/${{ name }}/${{ name }}-${{ version }}.tar.gz
+  sha256: 440e4f079bad9232d34241b1c0dd4debff654f932755af33f5a0dff2f39e9bc1
+
+build:
+  noarch: python
+  number: 0
+  script: python -m pip install . -vv --no-deps --no-build-isolation
+
+requirements:
+  host:
+    - python ${{ python_min }}.*
+    - setuptools >=77
+    - pip
+  run:
+    - python >=${{ python_min }}
+    - numpy >=2
+    - pandas >=3.0,<4
+    - pvlib >=0.15
+    - xarray >=2026.4,<2027
+
+tests:
+  - python:
+      imports:
+        - gsee
+        - gsee.pv
+        - gsee.api
+        - gsee.climate
+      pip_check: true
+      python_version:
+        - ${{ python_min }}.*
+        - "*"
+
+about:
+  homepage: https://github.com/renewables-ninja/gsee
+  repository: https://github.com/renewables-ninja/gsee
+  documentation: https://gsee.readthedocs.io
+  license: BSD-3-Clause
+  license_file: LICENSE
+  summary: "GSEE: Global Solar Energy Estimator"
+  description: |
+    GSEE is a solar energy simulation library designed for
+    rapid calculations and ease of use.
+extra:
+  recipe-maintainers:
+    - sjpfenninger
